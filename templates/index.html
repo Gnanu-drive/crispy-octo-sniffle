@@ -316,6 +316,11 @@
         });
 
         function updateUploadArea(filename) {
+            // Clear upload area safely
+            while (uploadArea.firstChild) {
+                uploadArea.removeChild(uploadArea.firstChild);
+            }
+            
             const uploadIcon = document.createElement('div');
             uploadIcon.className = 'upload-icon';
             uploadIcon.textContent = '📄';
@@ -328,7 +333,6 @@
             uploadSubtext.className = 'upload-subtext';
             uploadSubtext.textContent = 'Click to change file';
             
-            uploadArea.innerHTML = '';
             uploadArea.appendChild(uploadIcon);
             uploadArea.appendChild(uploadText);
             uploadArea.appendChild(uploadSubtext);
@@ -399,6 +403,11 @@
             progressFill.style.width = '0%';
             progressFill.textContent = '0%';
             
+            // Clear upload area safely
+            while (uploadArea.firstChild) {
+                uploadArea.removeChild(uploadArea.firstChild);
+            }
+            
             const uploadIcon = document.createElement('div');
             uploadIcon.className = 'upload-icon';
             uploadIcon.textContent = '☁️';
@@ -411,7 +420,6 @@
             uploadSubtext.className = 'upload-subtext';
             uploadSubtext.textContent = 'or click to browse (Max: 16MB)';
             
-            uploadArea.innerHTML = '';
             uploadArea.appendChild(uploadIcon);
             uploadArea.appendChild(uploadText);
             uploadArea.appendChild(uploadSubtext);
@@ -423,7 +431,10 @@
                 const response = await fetch('/files');
                 const data = await response.json();
 
-                filesList.innerHTML = '';  // Clear existing content
+                // Clear existing content safely
+                while (filesList.firstChild) {
+                    filesList.removeChild(filesList.firstChild);
+                }
                 
                 if (data.files && data.files.length > 0) {
                     data.files.forEach(file => {

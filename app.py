@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 # Configuration
 UPLOAD_FOLDER = 'uploads'
-MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB stream limit
+MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # Maximum file upload size: 16MB stream limit
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'zip', 'mp4', 'mp3'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
