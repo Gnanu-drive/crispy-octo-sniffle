@@ -14,6 +14,8 @@ A Flask-based web application that allows users to upload files with stream limi
 
 ### Installation
 
+#### Local Development
+
 1. Clone the repository:
 ```bash
 git clone https://github.com/Gnanu-drive/crispy-octo-sniffle.git
@@ -24,6 +26,24 @@ cd crispy-octo-sniffle
 ```bash
 pip install -r requirements.txt
 ```
+
+#### Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Gnanu-drive/crispy-octo-sniffle)
+
+1. Click the "Deploy with Vercel" button above, or:
+
+2. Install Vercel CLI:
+```bash
+npm i -g vercel
+```
+
+3. Deploy:
+```bash
+vercel
+```
+
+**Note**: When deployed on Vercel, uploaded files are stored in `/tmp` which is ephemeral. Files will be lost when the serverless function spins down. For persistent storage, consider using a cloud storage service like AWS S3, Cloudflare R2, or Vercel Blob Storage.
 
 ### Usage
 
@@ -65,6 +85,15 @@ The application can be configured in `app.py`:
 - Images: png, jpg, jpeg, gif
 - Media: mp4, mp3
 - Archives: zip
+
+### Deployment
+
+This application is ready to deploy on Vercel. The `vercel.json` configuration file is included in the repository.
+
+**Important Notes for Vercel Deployment:**
+- Uploaded files are stored in `/tmp` directory which is ephemeral
+- Files will be deleted when the serverless function restarts
+- For production use with persistent storage, integrate a cloud storage service (AWS S3, Cloudflare R2, Vercel Blob, etc.)
 
 ### License
 
