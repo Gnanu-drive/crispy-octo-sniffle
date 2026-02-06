@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 # Configuration
 # Use /tmp for uploads on Vercel (serverless environment), otherwise use local uploads folder
-UPLOAD_FOLDER = os.environ.get('VERCEL_ENV') and '/tmp/uploads' or 'uploads'
+UPLOAD_FOLDER = '/tmp/uploads' if os.environ.get('VERCEL_ENV') else 'uploads'
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # Maximum file upload size: 16MB stream limit
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'zip', 'mp4', 'mp3'}
 
