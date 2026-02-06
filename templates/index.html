@@ -401,17 +401,34 @@
                 const data = await response.json();
 
                 if (data.files && data.files.length > 0) {
-                    filesList.innerHTML = data.files.map(file => `
-                        <div class="file-item">
-                            <div class="file-info">
-                                <div class="file-name">${file.name}</div>
-                                <div class="file-size">${formatSize(file.size)}</div>
-                            </div>
-                            <button class="download-btn" onclick="downloadFile('${file.name}')">
-                                ⬇️ Download
-                            </button>
-                        </div>
-                    `).join('');
+                    filesList.innerHTML = data.files.map(file => {
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'file-item';
+                        
+                        const fileInfo = document.createElement('div');
+                        fileInfo.className = 'file-info';
+                        
+                        const fileName = document.createElement('div');
+                        fileName.className = 'file-name';
+                        fileName.textContent = file.name;  // Use textContent to prevent XSS
+                        
+                        const fileSize = document.createElement('div');
+                        fileSize.className = 'file-size';
+                        fileSize.textContent = formatSize(file.size);
+                        
+                        fileInfo.appendChild(fileName);
+                        fileInfo.appendChild(fileSize);
+                        
+                        const downloadBtn = document.createElement('button');
+                        downloadBtn.className = 'download-btn';
+                        downloadBtn.textContent = '⬇️ Download';
+                        downloadBtn.onclick = () => downloadFile(file.name);
+                        
+                        fileItem.appendChild(fileInfo);
+                        fileItem.appendChild(downloadBtn);
+                        
+                        return fileItem.outerHTML;
+                    }).join('');
                 } else {
                     filesList.innerHTML = '<div class="no-files">No files uploaded yet</div>';
                 }
@@ -429,7 +446,8 @@
         }
 
         function downloadFile(filename) {
-            window.location.href = '/files/' + filename;
+            // Properly encode filename to prevent XSS
+            window.location.href = '/files/' + encodeURIComponent(filename);
         }
 
         // Refresh button

@@ -85,6 +85,9 @@ def list_files():
     try:
         files = []
         for filename in os.listdir(app.config['UPLOAD_FOLDER']):
+            # Skip hidden files and .gitkeep
+            if filename.startswith('.'):
+                continue
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             if os.path.isfile(filepath):
                 files.append({
@@ -101,6 +104,14 @@ def list_files():
 def download_file(filename):
     """Download a file from the uploads folder."""
     try:
+        # Validate filename to prevent directory traversal
+        filename = secure_filename(filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        
+        # Ensure the resolved path is within the upload folder
+        if not os.path.abspath(filepath).startswith(os.path.abspath(app.config['UPLOAD_FOLDER'])):
+            return jsonify({'error': 'Invalid filename'}), 400
+        
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
     except Exception as e:
         logger.error(f"Download error: {str(e)}")
@@ -114,4 +125,6 @@ def request_entity_too_large(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Use environment variable for debug mode, default to False for security
+    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(debug=debug_mode, host='0.0.0.0', port=5000)
