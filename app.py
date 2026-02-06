@@ -76,7 +76,7 @@ def upload_file():
             
     except Exception as e:
         logger.error(f"Upload error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': 'An error occurred during file upload'}), 500
 
 
 @app.route('/files')
@@ -97,7 +97,7 @@ def list_files():
         return jsonify({'files': files}), 200
     except Exception as e:
         logger.error(f"List files error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': 'An error occurred while listing files'}), 500
 
 
 @app.route('/files/<filename>')

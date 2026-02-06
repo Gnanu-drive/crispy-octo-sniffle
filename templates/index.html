@@ -316,11 +316,22 @@
         });
 
         function updateUploadArea(filename) {
-            uploadArea.innerHTML = `
-                <div class="upload-icon">📄</div>
-                <div class="upload-text">${filename}</div>
-                <div class="upload-subtext">Click to change file</div>
-            `;
+            const uploadIcon = document.createElement('div');
+            uploadIcon.className = 'upload-icon';
+            uploadIcon.textContent = '📄';
+            
+            const uploadText = document.createElement('div');
+            uploadText.className = 'upload-text';
+            uploadText.textContent = filename;  // Use textContent to prevent XSS
+            
+            const uploadSubtext = document.createElement('div');
+            uploadSubtext.className = 'upload-subtext';
+            uploadSubtext.textContent = 'Click to change file';
+            
+            uploadArea.innerHTML = '';
+            uploadArea.appendChild(uploadIcon);
+            uploadArea.appendChild(uploadText);
+            uploadArea.appendChild(uploadSubtext);
         }
 
         // Upload file
@@ -387,11 +398,23 @@
             uploadBtn.disabled = true;
             progressFill.style.width = '0%';
             progressFill.textContent = '0%';
-            uploadArea.innerHTML = `
-                <div class="upload-icon">☁️</div>
-                <div class="upload-text">Drag & Drop your file here</div>
-                <div class="upload-subtext">or click to browse (Max: 16MB)</div>
-            `;
+            
+            const uploadIcon = document.createElement('div');
+            uploadIcon.className = 'upload-icon';
+            uploadIcon.textContent = '☁️';
+            
+            const uploadText = document.createElement('div');
+            uploadText.className = 'upload-text';
+            uploadText.textContent = 'Drag & Drop your file here';
+            
+            const uploadSubtext = document.createElement('div');
+            uploadSubtext.className = 'upload-subtext';
+            uploadSubtext.textContent = 'or click to browse (Max: 16MB)';
+            
+            uploadArea.innerHTML = '';
+            uploadArea.appendChild(uploadIcon);
+            uploadArea.appendChild(uploadText);
+            uploadArea.appendChild(uploadSubtext);
         }
 
         // Load files list
@@ -400,8 +423,10 @@
                 const response = await fetch('/files');
                 const data = await response.json();
 
+                filesList.innerHTML = '';  // Clear existing content
+                
                 if (data.files && data.files.length > 0) {
-                    filesList.innerHTML = data.files.map(file => {
+                    data.files.forEach(file => {
                         const fileItem = document.createElement('div');
                         fileItem.className = 'file-item';
                         
@@ -426,11 +451,13 @@
                         
                         fileItem.appendChild(fileInfo);
                         fileItem.appendChild(downloadBtn);
-                        
-                        return fileItem.outerHTML;
-                    }).join('');
+                        filesList.appendChild(fileItem);  // Append directly to DOM
+                    });
                 } else {
-                    filesList.innerHTML = '<div class="no-files">No files uploaded yet</div>';
+                    const noFiles = document.createElement('div');
+                    noFiles.className = 'no-files';
+                    noFiles.textContent = 'No files uploaded yet';
+                    filesList.appendChild(noFiles);
                 }
             } catch (error) {
                 console.error('Error loading files:', error);
