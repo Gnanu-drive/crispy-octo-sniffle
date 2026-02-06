@@ -384,7 +384,7 @@
                 xhr.send(formData);
 
             } catch (error) {
-                showMessage('error', 'Upload failed: ' + error.message);
+                showMessage('error', 'Upload failed. Please try again.');
                 uploadBtn.disabled = false;
                 progressContainer.style.display = 'none';
             }
